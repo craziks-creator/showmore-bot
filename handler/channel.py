@@ -34,7 +34,7 @@ def only_chnls(event):
 @my_router.on(Filter(only_chnls) & (MessageText.Len >= CONSTANTS.TRUNC + 10))
 async def start_rout_hndlr(event):
 	sent_message = await event.client.send_message(entity = FULL_POSTS_CHNLD_ID, message = event.message)
-	data = short_url.encode_url(sent_message.id, min_length = 10)
+	data = short_url.encode_url(sent_message.id, min_length = 30)
 	await event.client.edit_message(entity = event.message.to_id, message = event.message.id,
 	                                 buttons = custom.Button.inline(text = "Show More>>", data = f"op_{data}_0_0"),
 	                                 text = Edit.create_trunc_text(event.message))
@@ -99,12 +99,8 @@ async def all_call_hndlr(update):
 			await update.client.edit_message(entity = update.query.peer,
 			                                 text = got_msg.text,
 			                                 buttons = [
-				                                 [custom.Button.inline(text = f"{views} Views 👁️‍🗨",
-			                                                         data = f"vw_{code}_0_{views}"),
-                                         custom.Button.inline(text = "Close ❌",
-                                                              data = f"cl_{code}_{update.query.user_id}_{int(views)+1}")],
-                                         [custom.Button.url(text = "Created by ShowMore bot",
-                                                            url = 't.me/ShowMore_Bot')]],
+				                                 [custom.Button.inline(text = "Close ❌",
+                                                              data = f"cl_{code}_{update.query.user_id}_{int(views)+1}")]],
 			                                 message = update.query.msg_id)
 			scheduler.add_job(pre_close_message, kwargs = {"update": update},
 												run_date = datetime.now()+timedelta(minutes = calculate_read_time(got_msg.raw_text)))
